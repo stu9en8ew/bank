@@ -1,5 +1,0 @@
-fabrick-gbs-banking-service-v40:
-  api-key: FXOVVXXHVCPVPBZXIJOBGUGSKHDNFRRQJP
-  auth-schema: S2S
-  ribbon:
-    listOfServers: https://sandbox.platfr.io

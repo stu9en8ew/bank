@@ -21,7 +21,7 @@ public class BankingApplicationTests {
 	public void getBalance(){
 
 		given().queryParam("accountId", 14537780)
-			   .when().get(" http://localhost:8080/banking/balance")
+			   .when().get(" http://localhost:8082/banking/balance")
 			   .then().statusCode(200);
 
 	}
@@ -33,7 +33,7 @@ public class BankingApplicationTests {
 			   .queryParam("fromAccountingDate", "2019-01-01")
 			   .queryParam("toAccountingDate", "2019-12-01")
 			   .when()
-			   .get(" http://localhost:8080/banking/transactions")
+			   .get(" http://localhost:8082/banking/transactions")
 			   .then().statusCode(200);
 
 	}
@@ -48,7 +48,7 @@ public class BankingApplicationTests {
 			   .formParam("amount", "10.0")
 			   .formParam("executionDate", "2021-06-09")
 			   .when()
-			   .post("http://localhost:8080/banking/createMoneyTransfer")
+			   .post("http://localhost:8082/banking/createMoneyTransfer")
 		       .then().statusCode(200);
 	}
 

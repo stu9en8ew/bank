@@ -1,10 +1,9 @@
 package it.banking.service;
 
 import it.banking.repository.AccountRepository;
-import it.banking.rto.TransactionRto;
 import it.banking.rto.BalanceRto;
 import it.banking.rto.MoneyTransferRto;
-import org.springframework.beans.factory.annotation.Autowired;
+import it.banking.rto.TransactionRto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +12,7 @@ import java.util.List;
 @Service
 public class AccountService {
 
-    @Autowired
+
     private AccountRepository accountRepository;
 
     public ResponseEntity<BalanceRto> getBalance(Long accountId){
