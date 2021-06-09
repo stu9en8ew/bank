@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 public class AccountService {
 
-
+    
     private AccountRepository accountRepository;
 
     public ResponseEntity<BalanceRto> getBalance(Long accountId){
