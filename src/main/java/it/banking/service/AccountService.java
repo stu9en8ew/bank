@@ -1,31 +1,28 @@
 package it.banking.service;
 
-import it.banking.repository.AccountRepository;
-import it.banking.rto.BalanceRto;
-import it.banking.rto.MoneyTransferRto;
-import it.banking.rto.TransactionRto;
+import it.banking.client.AccountProducerClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class AccountService {
 
-    
-    private AccountRepository accountRepository;
+    @Autowired
+    private AccountProducerClient accountProducerClient;
 
-    public ResponseEntity<BalanceRto> getBalance(Long accountId){
 
-        return accountRepository.getBalance(accountId);
+    public ResponseEntity<?> getBalance(String contentType, String apiKey, String authSchema, Long accountId){
+
+        return accountProducerClient.getBalance(contentType, apiKey, authSchema, accountId);
     }
 
-    public ResponseEntity<List<TransactionRto>> getTransactions(Long accountId, String fromAccountingDate, String toAccountingDate){
-        return accountRepository.getTransactions(accountId, fromAccountingDate, toAccountingDate);
+    public ResponseEntity<?> getTransactions(String contentType, String apiKey, String authSchema, Long accountId, String fromAccountingDate, String toAccountingDate){
+        return accountProducerClient.getTransactions(contentType, apiKey, authSchema, accountId, fromAccountingDate, toAccountingDate);
     }
 
-    public ResponseEntity<MoneyTransferRto> createMoneyTransfer(Long accountId, String receiverName, String description, String currency, String amount, String executionDate){
-        return accountRepository.createMoneyTransfer(accountId, receiverName, description, currency, amount, executionDate);
+    public ResponseEntity<?> createMoneyTransfer(String contentType, String apiKey, String authSchema, Long accountId, String receiverName, String description, String currency, String amount, String executionDate){
+        return accountProducerClient.createMoneyTransfer(contentType, apiKey, authSchema, accountId, receiverName, description, currency, amount, executionDate);
     }
 
 

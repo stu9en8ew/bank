@@ -1,8 +1,5 @@
 package it.banking.controller;
 
-import it.banking.rto.BalanceRto;
-import it.banking.rto.MoneyTransferRto;
-import it.banking.rto.TransactionRto;
 import it.banking.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,8 +7,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(path="/banking/account", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -22,10 +17,14 @@ public class AccountController {
 
 
     @GetMapping("/balance")
-    public ResponseEntity<BalanceRto> getBalance(@RequestParam(required = true) Long accountId){
+    public ResponseEntity<?> getBalance(
+            @RequestHeader("Content-Type") String contentType,
+            @RequestHeader("Api-Key") String apiKey,
+            @RequestHeader("Auth-Schema") String authSchema,
+            @RequestParam(required = true) Long accountId){
 
         try {
-            return accountService.getBalance(accountId);
+            return accountService.getBalance(contentType, apiKey, authSchema, accountId);
         }
         catch(Exception e) {
             throw new ResponseStatusException(
@@ -35,13 +34,16 @@ public class AccountController {
     }
 
     @GetMapping("/transactions")
-    public ResponseEntity<List<TransactionRto>> getTransactions(
+    public ResponseEntity<?> getTransactions(
+            @RequestHeader("Content-Type") String contentType,
+            @RequestHeader("Api-Key") String apiKey,
+            @RequestHeader("Auth-Schema") String authSchema,
             @RequestParam(required = true) Long accountId,
             @RequestParam(required = true) String fromAccountingDate,
             @RequestParam(required = true) String toAccountingDate){
 
         try {
-            return accountService.getTransactions(accountId, fromAccountingDate, toAccountingDate);
+            return accountService.getTransactions(contentType, apiKey, authSchema, accountId, fromAccountingDate, toAccountingDate);
         }
         catch(Exception e) {
             throw new ResponseStatusException(
@@ -52,7 +54,10 @@ public class AccountController {
 
 
     @PostMapping("/moneyTransfer")
-    public ResponseEntity<MoneyTransferRto> createMoneyTransfer(
+    public ResponseEntity<?> createMoneyTransfer(
+            @RequestHeader("Content-Type") String contentType,
+            @RequestHeader("Api-Key") String apiKey,
+            @RequestHeader("Auth-Schema") String authSchema,
             @RequestBody Long accountId,
             @RequestBody String receiverName,
             @RequestBody String description,
@@ -62,7 +67,7 @@ public class AccountController {
 
 
         try {
-            return accountService.createMoneyTransfer(accountId, receiverName, description, currency, amount, executionDate);
+            return accountService.createMoneyTransfer(contentType, apiKey, authSchema, accountId, receiverName, description, currency, amount, executionDate);
         }
         catch(Exception e) {
             throw new ResponseStatusException(

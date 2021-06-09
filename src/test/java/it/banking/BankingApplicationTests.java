@@ -20,7 +20,10 @@ public class BankingApplicationTests {
 	@Test
 	public void getBalance(){
 
-		given().queryParam("accountId", 14537780)
+		given().header("Content-Type", "application/xml")
+			   .header("Api-Key", "application/xml")
+			   .header("Auth-Schema", "application/xml")
+			   .queryParam("accountId", 14537780)
 			   .when().get(" http://localhost:8082/banking/balance")
 			   .then().statusCode(200);
 
@@ -29,7 +32,10 @@ public class BankingApplicationTests {
 	@Test
 	public void getTransactions(){
 
-		given().queryParam("accountId", 14537780)
+		given().header("Content-Type", "application/xml")
+			   .header("Api-Key", "application/xml")
+			   .header("Auth-Schema", "application/xml")
+			   .queryParam("accountId", 14537780)
 			   .queryParam("fromAccountingDate", "2019-01-01")
 			   .queryParam("toAccountingDate", "2019-12-01")
 			   .when()
@@ -41,7 +47,10 @@ public class BankingApplicationTests {
 	@Test
 	public void createMoneyTransfer(){
 
-		given().formParam("accountId", 14537780)
+		given().header("Content-Type", "application/xml")
+			   .header("Api-Key", "application/xml")
+			   .header("Auth-Schema", "application/xml")
+			   .formParam("accountId", 14537780)
 			   .formParam("receiverName", "")
 			   .formParam("description", "Test moneyTransfer")
 			   .formParam("currency", "EUR")
