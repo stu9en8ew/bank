@@ -33,7 +33,7 @@ public class AccountController {
 
     }
 
-    @GetMapping("/getTransactions")
+    @GetMapping("/transactions")
     public ResponseEntity<List<TransactionRto>> getTransactions(
             @RequestParam(required = true) Long accountId,
             @RequestParam(required = true) String fromAccountingDate,
