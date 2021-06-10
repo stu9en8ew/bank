@@ -28,8 +28,7 @@ public class AccountController {
             return accountService.getBalance(contentType, apiKey, authSchema, accountId);
         }
         catch(Exception e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Balance not found.", e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Balance not found.", e);
         }
 
     }
@@ -47,8 +46,7 @@ public class AccountController {
             return accountService.getTransactions(contentType, apiKey, authSchema, accountId, fromAccountingDate, toAccountingDate);
         }
         catch(Exception e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Transactions not found.", e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Transactions not found.", e);
         }
 
     }
@@ -66,8 +64,7 @@ public class AccountController {
             return accountService.createMoneyTransfer(contentType, apiKey, authSchema, moneyTransferDto);
         }
         catch(Exception e) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "MoneyTransfer not created", e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "MoneyTransfer not created", e);
         }
 
     }
