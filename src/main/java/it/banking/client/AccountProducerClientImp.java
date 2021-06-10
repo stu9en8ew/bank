@@ -2,6 +2,7 @@ package it.banking.client;
 
 import it.banking.dto.MoneyTransferDto;
 import it.banking.util.AccountUtil;
+import org.json.simple.JSONObject;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -51,20 +52,19 @@ public class AccountProducerClientImp implements AccountProducerClient {
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = AccountUtil.buildHeaders(contentType, apiKey, authSchema);
-        String requestJson = AccountUtil.getRequestJson(moneyTransferDto);
 
-        /*Map<String, String> params = new HashMap<();
-        params.put("accountId", moneyTransferDto.getAccountId().toString());
-        params.put("receiverName", moneyTransferDto.getReceiverName());
-        params.put("description", moneyTransferDto.getDescription());
-        params.put("currency", moneyTransferDto.getCurrency();
-        params.put("amount", moneyTransferDto.getAmount());
-        params.put("executionDate", moneyTransferDto.getExecutionDate());*/
+        JSONObject test = new JSONObject();
+        test.put("accountId", moneyTransferDto.getAccountId());
+        test.put("receiverName", moneyTransferDto.getReceiverName());
+        test.put("description", moneyTransferDto.getDescription());
+        test.put("currency", moneyTransferDto.getCurrency());
+        test.put("amount", moneyTransferDto.getAmount());
+        test.put("executionDate", moneyTransferDto.getExecutionDate());
 
-        HttpEntity<String> request = new HttpEntity<String>(requestJson, headers);
+        HttpEntity<?> request = new HttpEntity<>(test, headers);
         ResponseEntity<?> responseEntity;
         responseEntity =
-                restTemplate.exchange(AccountUtil.urlMoneyTransfer(moneyTransferDto.getAccountId()), HttpMethod.POST, request, Object.class);
+                restTemplate.postForEntity(AccountUtil.urlMoneyTransfer(moneyTransferDto.getAccountId()), request, String.class);
         responseEntity.getBody();
 
         return responseEntity;

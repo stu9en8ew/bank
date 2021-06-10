@@ -67,7 +67,7 @@ public class AccountUtil {
 
         ((ObjectNode) rootNode).put("accountId", moneyTransferDto.getAccountId());
         ((ObjectNode) rootNode).put("receiverName", moneyTransferDto.getReceiverName());
-        ((ObjectNode) rootNode).put("description", moneyTransferDto.getCurrency());
+        ((ObjectNode) rootNode).put("description", moneyTransferDto.getDescription());
         ((ObjectNode) rootNode).put("currency", moneyTransferDto.getCurrency());
         ((ObjectNode) rootNode).put("amount", moneyTransferDto.getAmount());
         ((ObjectNode) rootNode).put("executionDate", moneyTransferDto.getExecutionDate());
@@ -89,14 +89,6 @@ public class AccountUtil {
     public static String urlBalance(){
         return "https://sandbox.platfr.io/api/gbs/banking/v4.0/accounts";
     }
-
-    /*restTemplate.exchange("http://my-rest-url.org/rest/account/{account}?name={name}",
-    HttpMethod.GET,
-    httpEntity,
-    clazz,
-            "my-account",
-            "my-name"
-            );*/
 
     public static String urlTransactions(Long accountId){
         return "https://sandbox.platfr.io/api/gbs/banking/v4.0/accounts/" + accountId +"/transactions?fromAccountingDate={fromAccountingDate}&toAccountingDate={toAccountingDate}";
