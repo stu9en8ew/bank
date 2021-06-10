@@ -1,9 +1,7 @@
 package it.banking.client;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import it.banking.dto.MoneyTransferDto;
+import it.banking.util.AccountUtil;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -12,83 +10,61 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import javax.validation.constraints.NotNull;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class AccountProducerClientImp implements AccountProducerClient {
-
-    private String getRequetJson(Long accountId) {
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode rootNode = mapper.createObjectNode();
-        ((ObjectNode) rootNode).put("accountId", accountId);
-        String jsonString = null;
-        try {
-            jsonString = mapper.writerWithDefaultPrettyPrinter()
-                    .writeValueAsString(rootNode);
-        }
-        catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return jsonString;
-    }
 
 
     @Override
     public ResponseEntity<?> getBalance(String contentType, String apiKey, String authSchema, @NotNull Long accountId) {
 
         RestTemplate restTemplate = new RestTemplate();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Type", contentType);
-        headers.set("Api-Key", apiKey);
-        headers.set("Auth-Schema", authSchema);
-
-        String requestJson = getRequetJson(accountId);
+        HttpHeaders headers = AccountUtil.buildHeaders(contentType, apiKey, authSchema);
+        String requestJson = AccountUtil.getRequestJson(accountId);
 
         HttpEntity<String> request = new HttpEntity<String>(requestJson, headers);
         ResponseEntity<?> responseEntity;
-        responseEntity =
-                restTemplate.exchange("https://sandbox.platfr.io/api/gbs/banking/v4.0/accounts", HttpMethod.GET, request, Object.class);
-        responseEntity.getBody();
+        responseEntity = restTemplate.exchange(AccountUtil.urlBalance(), HttpMethod.GET, request, Object.class);
 
         return responseEntity;
     }
 
     @Override
     public ResponseEntity<?> getTransactions(String contentType, String apiKey, String authSchema, Long accountId, String fromAccountingDate, String toAccountingDate) {
+
         RestTemplate restTemplate = new RestTemplate();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Type", contentType);
-        headers.set("Api-Key", apiKey);
-        headers.set("Auth-Schema", authSchema);
-
-        String requestJson = getRequetJson(accountId);
+        HttpHeaders headers = AccountUtil.buildHeaders(contentType, apiKey, authSchema);
+        String requestJson = AccountUtil.getRequestJson(fromAccountingDate, toAccountingDate);
 
         HttpEntity<String> request = new HttpEntity<String>(requestJson, headers);
         ResponseEntity<?> responseEntity;
-        responseEntity =
-                restTemplate.exchange("https://sandbox.platfr.io/api/gbs/banking/v4.0/accounts/" + accountId +"/transactions", HttpMethod.GET, request, Object.class);
-        responseEntity.getBody();
+        responseEntity = restTemplate.exchange(AccountUtil.urlTransactions(accountId), HttpMethod.GET, request, Object.class, fromAccountingDate, toAccountingDate);
 
         return responseEntity;
     }
 
 
     @Override
-    public ResponseEntity<?> createMoneyTransfer(String contentType, String apiKey, String authSchema, Long accountId, String receiverName, String description, String currency, String amount, String executionDate) {
+    public ResponseEntity<?> createMoneyTransfer(String contentType, String apiKey, String authSchema, MoneyTransferDto moneyTransferDto) {
         RestTemplate restTemplate = new RestTemplate();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Type", contentType);
-        headers.set("Api-Key", apiKey);
-        headers.set("Auth-Schema", authSchema);
+        HttpHeaders headers = AccountUtil.buildHeaders(contentType, apiKey, authSchema);
+        String requestJson = AccountUtil.getRequestJson(moneyTransferDto);
 
-        String requestJson = getRequetJson(accountId);
+        /*Map<String, String> params = new HashMap<();
+        params.put("accountId", moneyTransferDto.getAccountId().toString());
+        params.put("receiverName", moneyTransferDto.getReceiverName());
+        params.put("description", moneyTransferDto.getDescription());
+        params.put("currency", moneyTransferDto.getCurrency();
+        params.put("amount", moneyTransferDto.getAmount());
+        params.put("executionDate", moneyTransferDto.getExecutionDate());*/
 
         HttpEntity<String> request = new HttpEntity<String>(requestJson, headers);
         ResponseEntity<?> responseEntity;
         responseEntity =
-                restTemplate.exchange("https://sandbox.platfr.io/api/gbs/banking/v4.0/accounts/" + accountId +"/payments/money-transfers", HttpMethod.POST, request, Object.class);
+                restTemplate.exchange(AccountUtil.urlMoneyTransfer(moneyTransferDto.getAccountId()), HttpMethod.POST, request, Object.class);
         responseEntity.getBody();
 
         return responseEntity;

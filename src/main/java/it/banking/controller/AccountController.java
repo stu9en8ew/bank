@@ -1,5 +1,6 @@
 package it.banking.controller;
 
+import it.banking.dto.MoneyTransferDto;
 import it.banking.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,12 +34,12 @@ public class AccountController {
 
     }
 
-    @GetMapping("/transactions")
+    @GetMapping("{accountId}/transactions")
     public ResponseEntity<?> getTransactions(
             @RequestHeader("Content-Type") String contentType,
             @RequestHeader("Api-Key") String apiKey,
             @RequestHeader("Auth-Schema") String authSchema,
-            @RequestParam(required = true) Long accountId,
+            @PathVariable Long accountId,
             @RequestParam(required = true) String fromAccountingDate,
             @RequestParam(required = true) String toAccountingDate){
 
@@ -58,16 +59,11 @@ public class AccountController {
             @RequestHeader("Content-Type") String contentType,
             @RequestHeader("Api-Key") String apiKey,
             @RequestHeader("Auth-Schema") String authSchema,
-            @RequestBody Long accountId,
-            @RequestBody String receiverName,
-            @RequestBody String description,
-            @RequestBody String currency,
-            @RequestBody String amount,
-            @RequestBody String executionDate){
-
+            @RequestBody MoneyTransferDto moneyTransferDto
+            ){
 
         try {
-            return accountService.createMoneyTransfer(contentType, apiKey, authSchema, accountId, receiverName, description, currency, amount, executionDate);
+            return accountService.createMoneyTransfer(contentType, apiKey, authSchema, moneyTransferDto);
         }
         catch(Exception e) {
             throw new ResponseStatusException(

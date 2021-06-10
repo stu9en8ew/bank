@@ -1,5 +1,6 @@
 package it.banking.client;
 
+import it.banking.dto.MoneyTransferDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,10 +24,5 @@ public interface AccountProducerClient {
     ResponseEntity<?> createMoneyTransfer(@RequestHeader("Content-Type") String contentType,
                                           @RequestHeader("Api-Key") String apiKey,
                                           @RequestHeader("Auth-Schema") String authSchema,
-                                          @PathVariable Long accountId,
-                                          @RequestBody String receiverName,
-                                          @RequestBody String description,
-                                          @RequestBody String currency,
-                                          @RequestBody String amount,
-                                          @RequestBody String executionDate);
+                                          @RequestBody MoneyTransferDto moneyTransferDto);
 }
