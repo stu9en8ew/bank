@@ -53,15 +53,15 @@ public class AccountProducerClientImp implements AccountProducerClient {
 
         HttpHeaders headers = AccountUtil.buildHeaders(contentType, apiKey, authSchema);
 
-        JSONObject test = new JSONObject();
-        test.put("accountId", moneyTransferDto.getAccountId());
-        test.put("receiverName", moneyTransferDto.getReceiverName());
-        test.put("description", moneyTransferDto.getDescription());
-        test.put("currency", moneyTransferDto.getCurrency());
-        test.put("amount", moneyTransferDto.getAmount());
-        test.put("executionDate", moneyTransferDto.getExecutionDate());
+        JSONObject params = new JSONObject();
+        params.put("accountId", moneyTransferDto.getAccountId());
+        params.put("receiverName", moneyTransferDto.getReceiverName());
+        params.put("description", moneyTransferDto.getDescription());
+        params.put("currency", moneyTransferDto.getCurrency());
+        params.put("amount", moneyTransferDto.getAmount());
+        params.put("executionDate", moneyTransferDto.getExecutionDate());
 
-        HttpEntity<?> request = new HttpEntity<>(test, headers);
+        HttpEntity<?> request = new HttpEntity<>(params, headers);
         ResponseEntity<?> responseEntity;
         responseEntity =
                 restTemplate.postForEntity(AccountUtil.urlMoneyTransfer(moneyTransferDto.getAccountId()), request, String.class);
